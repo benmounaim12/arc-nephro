@@ -18,7 +18,7 @@ export default function HomeView({ onNav }: { onNav:(tab:string,sub?:string)=>vo
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-full overflow-hidden bg-white flex items-center justify-center flex-shrink-0">
-              <Image src="/logo-arc.png" alt="Logo ARC" width={36} height={36} className="object-cover w-full h-full" />
+              <Image src="/logo-arc.jpg" alt="Logo ARC" width={36} height={36} className="object-cover w-full h-full" />
             </div>
             <div>
               <p className="text-blue-300 text-xs font-semibold">ARC Néphro</p>

@@ -38,7 +38,7 @@ export default function RegisterScreen({ onSwitch }: { onSwitch: () => void }) {
     <div className="min-h-screen bg-navy flex flex-col">
       <div className="flex flex-col items-center pt-10 pb-6 px-8">
         <div className="w-14 h-14 rounded-full overflow-hidden bg-white mb-3">
-          <Image src="/logo-arc.png" alt="Logo ARC" width={56} height={56} className="object-cover w-full h-full"/>
+          <Image src="/logo-arc.jpg" alt="Logo ARC" width={56} height={56} className="object-cover w-full h-full"/>
         </div>
         <p className="text-white text-base font-bold">Rejoindre ARC Néphro</p>
         <div className="flex items-center gap-2 mt-3">
