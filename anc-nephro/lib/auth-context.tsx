@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase';
 export interface Profile {
   id: string; full_name: string; specialty: string; hospital: string;
   phone: string; status: 'pending'|'active'|'suspended'; role: 'member'|'admin'; member_since: string;
+  titre?: string; prenom?: string; nom?: string; secteur?: string;
+  type_etablissement?: string; region?: string; ville?: string; annuaire?: boolean;
 }
 interface SignUpData { email:string; password:string; full_name:string; specialty:string; hospital:string; phone:string; }
 interface AuthCtx {

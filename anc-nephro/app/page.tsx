@@ -14,23 +14,59 @@ import AnnuaireView   from '@/components/AnnuaireView';
 import AboutView      from '@/components/AboutView';
 import ProfileView    from '@/components/ProfileView';
 
-type Tab = 'home'|'tools'|'agenda'|'news'|'kilia'|'annuaire'|'about'|'profile';
+type Tab = 'home'|'tools'|'agenda'|'news'|'annuaire'|'about'|'profile';
 
-// Navigation principale — 5 onglets visibles, reste via "Plus"
 const NAV_MAIN: {id:Tab;icon:string;label:string}[] = [
-  {id:'home',    icon:'🏠', label:'Accueil'},
-  {id:'tools',   icon:'🧮', label:'Outils'},
-  {id:'kilia',   icon:'🤖', label:'KiliA'},
-  {id:'agenda',  icon:'📅', label:'Agenda'},
-  {id:'more',    icon:'⋯',  label:'Plus'} as any,
+  {id:'home',   icon:'🏠', label:'Accueil'},
+  {id:'tools',  icon:'🧮', label:'Outils'},
+  {id:'agenda', icon:'📅', label:'Agenda'},
+  {id:'news',   icon:'📰', label:'News'},
+  {id:'more' as any, icon:'⋯', label:'Plus'},
 ];
 
 const NAV_MORE: {id:Tab;icon:string;label:string;desc:string}[] = [
-  {id:'news',     icon:'📰', label:'Actualités',   desc:'Veille scientifique'},
-  {id:'annuaire', icon:'👥', label:'Annuaire',      desc:'Membres ARC'},
-  {id:'about',    icon:'🏛️', label:'À propos',      desc:'L\'association ARC'},
-  {id:'profile',  icon:'👤', label:'Mon profil',    desc:'Mon compte'},
+  {id:'annuaire', icon:'👥', label:'Annuaire',   desc:'Membres ARC'},
+  {id:'about',    icon:'🏛️', label:'À propos',   desc:'L\'association'},
+  {id:'profile',  icon:'👤', label:'Mon profil', desc:'Mon compte'},
 ];
+
+function KiliaFAB({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="fixed bottom-20 right-3 z-50 w-16 h-16 rounded-full shadow-xl flex items-center justify-center overflow-hidden bg-white border-2 border-white"
+      style={{boxShadow:'0 6px 24px rgba(29,78,216,0.45)'}}
+      aria-label="Ouvrir KiliA"
+    >
+      <img src="/kilia-icon.png" alt="KiliA" className="w-full h-full object-cover"/>
+      <span className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white"></span>
+    </button>
+  );
+}
+
+function KiliaModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col" style={{background:'rgba(0,0,0,0.5)'}}>
+      <div className="flex-shrink-0 h-16" onClick={onClose}></div>
+      <div className="flex-1 flex flex-col bg-gray-50 rounded-t-3xl overflow-hidden">
+        <div className="bg-navy px-5 py-3 flex items-center gap-3 flex-shrink-0">
+          <div className="relative">
+            <div className="w-9 h-9 bg-blue-700 rounded-full flex items-center justify-center text-white font-bold text-sm">K</div>
+            <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-navy"></div>
+          </div>
+          <div className="flex-1">
+            <p className="text-white font-bold text-sm">KiliA</p>
+            <p className="text-blue-300 text-xs">Assistant IA · Spécialiste Néphrologie</p>
+          </div>
+          <button onClick={onClose} className="text-blue-300 text-2xl leading-none">×</button>
+        </div>
+        <div className="flex-1 overflow-hidden">
+          <KiliaView />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function AppShell() {
   const { user, profile, loading, signOut } = useAuth();
@@ -38,6 +74,7 @@ function AppShell() {
   const [tab,setTab]=useState<Tab>('home');
   const [toolsSub,setToolsSub]=useState<string|undefined>();
   const [showMore,setShowMore]=useState(false);
+  const [showKilia,setShowKilia]=useState(false);
 
   if(loading) return (
     <div className="min-h-screen bg-navy flex items-center justify-center">
@@ -65,34 +102,34 @@ function AppShell() {
   );
 
   const handleNav=(t:string,sub?:string)=>{
-    setTab(t as Tab);
+    setTab(t as Tab); setShowMore(false);
     if(t==='tools') setToolsSub(sub);
-    setShowMore(false);
   };
 
-  const activeMain = ['home','tools','kilia','agenda'].includes(tab) ? tab : 'more';
+  const activeMain = ['home','tools','agenda','news'].includes(tab) ? tab : 'more';
 
   return (
     <div className="min-h-screen bg-navy flex items-center justify-center">
       <div className="w-full max-w-sm bg-gray-50 relative flex flex-col" style={{minHeight:'100svh'}}>
 
-        {/* More drawer */}
+        {/* KiliA FAB */}
+        {!showKilia && <KiliaFAB onClick={()=>setShowKilia(true)}/>}
+        {showKilia && <KiliaModal onClose={()=>setShowKilia(false)}/>}
+
+        {/* More drawer — grille compacte sans scroll */}
         {showMore && (
-          <div className="absolute inset-0 z-40 bg-black/50" onClick={()=>setShowMore(false)}>
-            <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl p-4"
+          <div className="absolute inset-0 z-40" onClick={()=>setShowMore(false)}>
+            <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl px-4 pt-4 pb-5 shadow-xl"
               onClick={e=>e.stopPropagation()}>
               <div className="w-8 h-1 bg-gray-200 rounded-full mx-auto mb-4"></div>
-              <p className="text-xs font-semibold text-gray-400 mb-3 px-1">NAVIGATION</p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-3">
                 {NAV_MORE.map(n=>(
                   <button key={n.id} onClick={()=>handleNav(n.id)}
-                    className={`flex items-center gap-3 p-3 rounded-xl border transition-colors text-left
+                    className={`flex flex-col items-center gap-2 p-3 rounded-2xl border transition-colors
                       ${tab===n.id?'bg-blue-50 border-blue-200':'bg-gray-50 border-gray-100'}`}>
-                    <span className="text-2xl">{n.icon}</span>
-                    <div>
-                      <p className={`text-sm font-semibold ${tab===n.id?'text-blue-700':'text-gray-900'}`}>{n.label}</p>
-                      <p className="text-xs text-gray-400">{n.desc}</p>
-                    </div>
+                    <span className="text-3xl">{n.icon}</span>
+                    <p className={`text-xs font-semibold ${tab===n.id?'text-blue-700':'text-gray-700'}`}>{n.label}</p>
+                    <p className="text-xs text-gray-400">{n.desc}</p>
                   </button>
                 ))}
               </div>
@@ -101,20 +138,19 @@ function AppShell() {
         )}
 
         {/* Views */}
-        {tab==='home'     && <HomeView     onNav={handleNav}/>}
+        {tab==='home'     && <HomeView     onNav={handleNav} profile={profile}/>}
         {tab==='tools'    && <ToolsView    initialTab={toolsSub} key={toolsSub}/>}
         {tab==='agenda'   && <AgendaView   />}
         {tab==='news'     && <NewsView     />}
-        {tab==='kilia'    && <KiliaView    />}
         {tab==='annuaire' && <AnnuaireView />}
         {tab==='about'    && <AboutView    />}
         {tab==='profile'  && <ProfileView  />}
 
-        {/* Bottom nav — 5 onglets */}
-        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-100 flex pb-safe z-50">
+        {/* Bottom nav */}
+        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-100 flex pb-safe z-30">
           {NAV_MAIN.map(n=>{
             const isMore = n.id === ('more' as any);
-            const isActive = isMore ? showMore || !['home','tools','kilia','agenda'].includes(tab) : tab===n.id && !showMore;
+            const isActive = isMore ? showMore || !['home','tools','agenda','news'].includes(tab) : tab===n.id&&!showMore;
             return (
               <button key={n.id} onClick={()=>{
                 if(isMore){ setShowMore(v=>!v); }
