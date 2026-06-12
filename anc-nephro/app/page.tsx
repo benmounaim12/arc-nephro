@@ -51,7 +51,9 @@ function KiliaModal({ onClose }: { onClose: () => void }) {
       <div className="flex-1 flex flex-col bg-gray-50 rounded-t-3xl overflow-hidden">
         <div className="bg-navy px-5 py-3 flex items-center gap-3 flex-shrink-0">
           <div className="relative">
-            <div className="w-9 h-9 bg-blue-700 rounded-full flex items-center justify-center text-white font-bold text-sm">K</div>
+            <div className="w-9 h-9 rounded-full overflow-hidden bg-white">
+              <img src="/kilia-icon.png" alt="KiliA" className="w-full h-full object-cover"/>
+            </div>
             <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-navy"></div>
           </div>
           <div className="flex-1">
@@ -106,17 +108,13 @@ function AppShell() {
     if(t==='tools') setToolsSub(sub);
   };
 
-  const activeMain = ['home','tools','agenda','news'].includes(tab) ? tab : 'more';
-
   return (
     <div className="min-h-screen bg-navy flex items-center justify-center">
       <div className="w-full max-w-sm bg-gray-50 relative flex flex-col" style={{minHeight:'100svh'}}>
 
-        {/* KiliA FAB */}
         {!showKilia && <KiliaFAB onClick={()=>setShowKilia(true)}/>}
         {showKilia && <KiliaModal onClose={()=>setShowKilia(false)}/>}
 
-        {/* More drawer — grille compacte sans scroll */}
         {showMore && (
           <div className="absolute inset-0 z-40" onClick={()=>setShowMore(false)}>
             <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl px-4 pt-4 pb-5 shadow-xl"
@@ -137,8 +135,7 @@ function AppShell() {
           </div>
         )}
 
-        {/* Views */}
-        {tab==='home'     && <HomeView     onNav={handleNav} profile={profile}/>}
+        {tab==='home'     && <HomeView     onNav={handleNav}/>}
         {tab==='tools'    && <ToolsView    initialTab={toolsSub} key={toolsSub}/>}
         {tab==='agenda'   && <AgendaView   />}
         {tab==='news'     && <NewsView     />}
@@ -146,7 +143,6 @@ function AppShell() {
         {tab==='about'    && <AboutView    />}
         {tab==='profile'  && <ProfileView  />}
 
-        {/* Bottom nav */}
         <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-gray-100 flex pb-safe z-30">
           {NAV_MAIN.map(n=>{
             const isMore = n.id === ('more' as any);

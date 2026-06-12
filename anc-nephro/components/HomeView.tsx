@@ -1,13 +1,13 @@
 'use client';
 import Image from 'next/image';
-import { events, news, tagColors } from '@/lib/data';
-import type { Profile } from '@/lib/auth-context';
+import { useAuth } from '@/lib/auth-context';
+import { events, news } from '@/lib/data';
 
 const tools = [
-  { id:'ckdepi', label:'DFGe CKD-EPI',     desc:'Filtration glomérulaire', icon:'🧮', bg:'bg-blue-50' },
-  { id:'cg',     label:'Cockcroft-Gault',   desc:'Clairance créatinine',   icon:'⚗️', bg:'bg-green-50' },
-  { id:'ktv',    label:'Kt/V Dialyse',      desc:'Dose de dialyse',        icon:'💧', bg:'bg-purple-50' },
-  { id:'acr',    label:'ACR Urinaire',      desc:'Albumine/créatinine',    icon:'📊', bg:'bg-amber-50' },
+  { id:'ckdepi', label:'DFGe CKD-EPI',   desc:'Filtration glomérulaire', icon:'🧮', bg:'bg-blue-50' },
+  { id:'cg',     label:'Cockcroft-Gault', desc:'Clairance créatinine',   icon:'⚗️', bg:'bg-green-50' },
+  { id:'ktv',    label:'Kt/V Dialyse',   desc:'Dose de dialyse',        icon:'💧', bg:'bg-purple-50' },
+  { id:'acr',    label:'ACR Urinaire',   desc:'Albumine/créatinine',    icon:'📊', bg:'bg-amber-50' },
 ];
 
 function getGreeting(): string {
@@ -15,21 +15,6 @@ function getGreeting(): string {
   if (h >= 5  && h < 12) return 'Bonjour';
   if (h >= 12 && h < 18) return 'Bon après-midi';
   return 'Bonsoir';
-}
-
-function getTitle(profile: Profile | null): string {
-  if (!profile) return '';
-  if (profile.titre === 'Docteur') return 'Dr.';
-  if (profile.titre === 'Professeur') return 'Pr.';
-  return profile.titre || '';
-}
-
-function getLastName(profile: Profile | null): string {
-  if (!profile) return '';
-  // Use nom field if available, otherwise extract from full_name
-  if ((profile as any).nom) return (profile as any).nom;
-  const parts = profile.full_name?.split(' ') || [];
-  return parts[parts.length - 1] || '';
 }
 
 function getSubMessage(): string {
@@ -46,15 +31,16 @@ function getSubMessage(): string {
   return msgs[day];
 }
 
-export default function HomeView({ onNav, profile }: { onNav:(tab:string,sub?:string)=>void; profile: Profile | null }) {
+export default function HomeView({ onNav }: { onNav:(tab:string,sub?:string)=>void }) {
+  const { profile } = useAuth();
   const featuredEvent = events.find(e=>e.featured);
+
+  const titre = profile?.titre === 'Docteur' ? 'Dr.' : profile?.titre === 'Professeur' ? 'Pr.' : profile?.titre || '';
+  const lastName = (profile as any)?.nom || profile?.full_name?.split(' ').slice(-1)[0] || '';
   const greeting = getGreeting();
-  const title = getTitle(profile);
-  const lastName = getLastName(profile);
 
   return (
     <div className="flex-1 overflow-y-auto pb-20">
-      {/* Header */}
       <div className="bg-navy px-5 pt-4 pb-5">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -70,17 +56,13 @@ export default function HomeView({ onNav, profile }: { onNav:(tab:string,sub?:st
             🔔<span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-navy"></span>
           </button>
         </div>
-
-        {/* Salutation dynamique */}
         <p className="text-white text-xl font-bold">
-          {greeting}{title || lastName ? ',' : ''} {title} {lastName} 👋
+          {greeting}{titre || lastName ? ',' : ''} {titre} {lastName} 👋
         </p>
         <p className="text-blue-300 text-xs mt-1 leading-relaxed">{getSubMessage()}</p>
       </div>
 
       <div className="p-4 space-y-4">
-
-        {/* Événement vedette — bandeau horizontal */}
         {featuredEvent && (
           <section>
             <div className="flex items-center justify-between mb-2">
@@ -88,24 +70,14 @@ export default function HomeView({ onNav, profile }: { onNav:(tab:string,sub?:st
               <button onClick={()=>onNav('agenda')} className="text-xs text-blue-600 font-medium">Agenda →</button>
             </div>
             <div className="rounded-2xl overflow-hidden border border-gray-100 cursor-pointer" onClick={()=>onNav('agenda')}>
-              {/* Bandeau horizontal */}
               <div className="relative w-full overflow-hidden" style={{height:'120px'}}>
-                <Image
-                  src="/event-banner.jpg"
-                  alt="24ème Réunion Scientifique ARC"
-                  fill
-                  className="object-cover object-center"
-                  priority
-                />
+                <Image src="/event-banner.jpg" alt="24ème Réunion Scientifique ARC" fill className="object-cover object-center" priority/>
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent"></div>
                 <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between">
-                  <span className="bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-full">
-                    27 Juin 2026
-                  </span>
+                  <span className="bg-amber-400 text-amber-900 text-xs font-bold px-2 py-0.5 rounded-full">27 Juin 2026</span>
                   <span className="text-white/70 text-xs">Al Akhawayn · Ifrane</span>
                 </div>
               </div>
-              {/* Infos événement */}
               <div className="bg-navy px-3 py-2.5">
                 <p className="text-white text-sm font-bold">{featuredEvent.name}</p>
                 <p className="text-amber-400 text-xs italic mt-0.5">"{featuredEvent.theme}"</p>
@@ -114,7 +86,6 @@ export default function HomeView({ onNav, profile }: { onNav:(tab:string,sub?:st
           </section>
         )}
 
-        {/* Outils cliniques */}
         <section>
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xs font-semibold text-gray-700">Outils cliniques</h2>
@@ -132,7 +103,6 @@ export default function HomeView({ onNav, profile }: { onNav:(tab:string,sub?:st
           </div>
         </section>
 
-        {/* News */}
         <section>
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-xs font-semibold text-gray-700">Actualités</h2>
@@ -151,7 +121,6 @@ export default function HomeView({ onNav, profile }: { onNav:(tab:string,sub?:st
             ))}
           </div>
         </section>
-
       </div>
     </div>
   );
