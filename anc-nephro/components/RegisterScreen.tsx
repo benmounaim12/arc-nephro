@@ -74,6 +74,14 @@ export default function RegisterScreen({ onSwitch }: { onSwitch: () => void }) {
         specialty: `${secteur} · ${typeEtab}`,
         hospital: `${nomEtab}, ${ville}`,
         phone,
+        titre: titre === 'Autre' ? autretitre : titre,
+        prenom,
+        nom,
+        secteur,
+        type_etablissement: typeEtab,
+        region,
+        ville,
+        annuaire,
       });
       if(err){setError(err);setLoading(false);return;}
       setDone(true); setLoading(false);
