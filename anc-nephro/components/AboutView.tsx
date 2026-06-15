@@ -3,8 +3,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 const BUREAU = [
-  { titre:'Présidente', nom:'Dr. Nadia Kabbali', etablissement:'Association Rénale du Centre', initiales:'NK', color:'bg-red-600' },
-  { titre:'Vice-Présidente', nom:'Dr. Basmat Amal Chouhani', etablissement:'Association Rénale du Centre', initiales:'BC', color:'bg-blue-600' },
+  { titre:'Présidente', nom:'Pr. Nadia Kabbali', etablissement:'Association Rénale du Centre', initiales:'NK', color:'bg-red-600' },
+  { titre:'Vice-Présidente', nom:'Pr. Basmat Amal Chouhani', etablissement:'Association Rénale du Centre', initiales:'BC', color:'bg-blue-600' },
   { titre:'Secrétaire Générale', nom:'Dr. Ghita El Yousfi', etablissement:'Association Rénale du Centre', initiales:'GY', color:'bg-green-600' },
   { titre:'Vice-Secrétaire Générale', nom:'Dr. Mouna El Mansouri', etablissement:'Association Rénale du Centre', initiales:'MM', color:'bg-purple-600' },
   { titre:'Trésorière', nom:'Dr. Souad Mikou', etablissement:'Association Rénale du Centre', initiales:'SM', color:'bg-amber-600' },
@@ -111,11 +111,7 @@ export default function AboutView() {
                 </div>
               </div>
             ))}
-            <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-center mt-2">
-              <p className="text-xs text-amber-700 font-medium">⚠️ Les informations du bureau sont à titre indicatif.</p>
-              <p className="text-xs text-amber-600 mt-0.5">Contactez l'ARC pour les données officielles.</p>
-            </div>
-          </div>
+           
         )}
 
         {/* HISTORIQUE */}
