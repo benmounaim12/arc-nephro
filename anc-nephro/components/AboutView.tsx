@@ -85,7 +85,7 @@ export default function AboutView() {
           <div className="space-y-3">
             <div className="bg-navy rounded-2xl p-4 border border-blue-800 mb-4">
               <p className="text-white text-xs text-center font-semibold">Bureau de l'Association Rénale du Centre</p>
-              <p className="text-blue-300 text-xs text-center mt-0.5">Mandat 2024 – 2027</p>
+              <p className="text-blue-300 text-xs text-center mt-0.5">Mandat 2026 – 2029</p>
             </div>
             {/* Président en évidence */}
             <div className="bg-white rounded-2xl border-2 border-blue-200 p-4 flex items-center gap-3">
