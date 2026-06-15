@@ -3,12 +3,13 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 const BUREAU = [
-  { titre:'Président', nom:'Pr. Mohammed Arrayhani', etablissement:'CHU Hassan II, Fès', initiales:'MA', color:'bg-red-600' },
-  { titre:'Vice-Président', nom:'Pr. Asmaa Tachfouti', etablissement:'CHU Ibn Rochd, Casablanca', initiales:'AT', color:'bg-blue-600' },
-  { titre:'Secrétaire Général', nom:'Dr. Youssef Benamar', etablissement:'CHR Meknès', initiales:'YB', color:'bg-green-600' },
-  { titre:'Trésorier', nom:'Dr. Fatima Zahra Idrissi', etablissement:'CHU Mohamed VI, Marrakech', initiales:'FI', color:'bg-purple-600' },
-  { titre:'Membre du Bureau', nom:'Dr. Karim Senhaji', etablissement:'CHU Ibn Sina, Rabat', initiales:'KS', color:'bg-amber-600' },
-  { titre:'Membre du Bureau', nom:'Dr. Nadia Benchekroun', etablissement:'CHU Hassan II, Fès', initiales:'NB', color:'bg-teal-600' },
+  { titre:'Présidente', nom:'Dr. Nadia Kabbali', etablissement:'Association Rénale du Centre', initiales:'NK', color:'bg-red-600' },
+  { titre:'Vice-Présidente', nom:'Dr. Basmat Amal Chouhani', etablissement:'Association Rénale du Centre', initiales:'BC', color:'bg-blue-600' },
+  { titre:'Secrétaire Générale', nom:'Dr. Ghita El Yousfi', etablissement:'Association Rénale du Centre', initiales:'GY', color:'bg-green-600' },
+  { titre:'Vice-Secrétaire Générale', nom:'Dr. Mouna El Mansouri', etablissement:'Association Rénale du Centre', initiales:'MM', color:'bg-purple-600' },
+  { titre:'Trésorière', nom:'Dr. Souad Mikou', etablissement:'Association Rénale du Centre', initiales:'SM', color:'bg-amber-600' },
+  { titre:'Vice-Trésorière', nom:'Dr. Wiam Rami', etablissement:'Association Rénale du Centre', initiales:'WR', color:'bg-teal-600' },
+  { titre:'Assesseur', nom:'Dr. Fatimazahra Harrat', etablissement:'Association Rénale du Centre', initiales:'FH', color:'bg-pink-600' },
 ];
 
 const TABS = ['Objectifs','Organigramme','Historique'];
